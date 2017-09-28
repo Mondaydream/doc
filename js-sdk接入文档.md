@@ -17,7 +17,8 @@
       var _yic = _yic || [];
       (function () {
           var hm = document.createElement("script");
-          hm.src = "web-sdk.js?756a47fc475b1fd22b0d33f283fa4090";// [该数据由系统生成]
+	  // sdk资源链接[该数据由系统生成]
+          hm.src = "https://yiconnect.wezhuiyi.com/public/im-chat/static/web-sdk.js?756a47fc475b1fd22b0d33f283fa4091";
           var s = document.getElementsByTagName("script")[0];
           s.parentNode.insertBefore(hm, s);
       })();
@@ -27,7 +28,7 @@
     _yic.push(['init', {
         el: 'kefu-btn',// 绑定按钮ID
         token: 'RjNPWT7chxE05nGwpE4JtQQfDWAaSBCr6HO3RTb8fmU',// 加密token[该数据由系统生成]
-        src: '//192.168.0.136:8034/web.html',// 聊天地址[该数据由系统生成]
+        src: 'https://yiconnect.wezhuiyi.com/webChat',// 聊天地址[该数据由系统生成]
         style: {
             className: 'chat-window',// 自定义类名
             width: '330px',// 宽度

@@ -16,9 +16,9 @@
     <script>
       var _yic = _yic || [];
       (function () {
-          var hm = document.createElement("script");
+          var yis = document.createElement("script");
 	      // sdk资源链接[该数据由系统生成]
-          hm.src = "https://yiconnect.wezhuiyi.com/public/im-chat/static/web-sdk.js?756a47fc475b1fd22b0d33f283fa4091";
+          yis.src = "https://yiconnect.wezhuiyi.com/public/im-chat/static/web-sdk.js?756a47fc475b1fd22b0d33f283fa4091";
           var s = document.getElementsByTagName("script")[0];
           s.parentNode.insertBefore(hm, s);
       })();

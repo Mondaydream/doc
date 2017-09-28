@@ -17,7 +17,7 @@
       var _yic = _yic || [];
       (function () {
           var hm = document.createElement("script");
-          hm.src = "/static/web-sdk.js?756a47fc475b1fd22b0d33f283fa4090";
+          hm.src = "web-sdk.js?756a47fc475b1fd22b0d33f283fa4090";// [该数据由系统生成]
           var s = document.getElementsByTagName("script")[0];
           s.parentNode.insertBefore(hm, s);
       })();
@@ -26,8 +26,8 @@
 ##  2. <a name='init'></a>初始化方法init
     _yic.push(['init', {
         el: 'kefu-btn',// 绑定按钮ID
-        token: 'RjNPWT7chxE05nGwpE4JtQQfDWAaSBCr6HO3RTb8fmU',// 加密token
-        src: '//192.168.0.136:8034/web.html',// 聊天地址
+        token: 'RjNPWT7chxE05nGwpE4JtQQfDWAaSBCr6HO3RTb8fmU',// 加密token[该数据由系统生成]
+        src: '//192.168.0.136:8034/web.html',// 聊天地址[该数据由系统生成]
         style: {
             className: 'chat-window',// 自定义类名
             width: '330px',// 宽度

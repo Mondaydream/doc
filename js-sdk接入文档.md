@@ -36,7 +36,9 @@
             right: '40px',
             bottom: '0',
         },
-        autoConnect: false,// 是否自动转人工
+        noYiBot: false,// 禁止机器人会话（自动转人工，若无人工则显示留言窗口）
+        tag: '',// 优先技能（客服组）
+        ls: '',// 优先坐席
     }]);
 
 ##  3. <a name='event'></a>事件event

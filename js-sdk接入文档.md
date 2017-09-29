@@ -4,6 +4,7 @@
 * 2. [初始化方法init](#init)
 * 3. [事件event](#event)
 	* 3.1. [未读消息变更onNewMessageCount](#onNewMessageCount)
+	* 3.2. [接收一条未读客服消息onMessage](#onMessage)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -37,6 +38,7 @@
             right: '40px',
             bottom: '0',
         },
+        themeColor:'#123456', // 默认主题色，优先级比后台设置主题色高，格式要求为#xxxxxx
         noYiBot: false,// 禁止机器人会话（自动转人工，若无人工则显示留言窗口）
         tag: '',// 优先技能（客服组）
         ls: '',// 优先坐席
@@ -47,3 +49,19 @@
     _yic.push(['onNewMessageCount', function(num){
         document.getElementById('msg-count').innerHTML = num;
     }]);
+
+###  3.2. <a name='onMessage'></a>接收一条未读客服消息onMessage
+    _yic.push(['onMessage', function(data){
+        console.log(data);
+    }]);
+
+    data: {
+        'seq', // 消息唯一标识        
+        'word',// 消息内容
+        'timestamp',// 时间戳
+        'serviceName',// 客服名称
+        'serviceID',// 客服ID
+        'serviceAvatar',// 客服头像
+        'userID',// 接收用户ID
+    }
+

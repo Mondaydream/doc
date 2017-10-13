@@ -5,6 +5,9 @@
 * 3. [事件event](#event)
 	* 3.1. [未读消息变更onNewMessageCount](#onNewMessageCount)
 	* 3.2. [接收一条未读客服消息onMessage](#onMessage)
+* 4. [咨询信息接入setData【开发中】](#setData)
+	* 4.1. [客户信息接入customer](#customer)
+	* 4.2. [商品信息接入product](#product)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -17,10 +20,10 @@
     <script>
       var _yic = _yic || [];
       (function () {
-          var yis = document.createElement("script");
+          var yis = document.createElement('script');
 	      // sdk资源链接[该数据由系统生成]
-          yis.src = "https://yiconnect.wezhuiyi.com/public/im-chat/static/web-sdk.js?756a47fc475b1fd22b0d33f283fa4091";
-          var s = document.getElementsByTagName("script")[0];
+          yis.src = 'https://yiconnect.wezhuiyi.com/public/im-chat/static/web-sdk.js?756a47fc475b1fd22b0d33f283fa4091';
+          var s = document.getElementsByTagName('script')[0];
           s.parentNode.insertBefore(yis, s);
       })();
     </script>
@@ -28,20 +31,29 @@
 ##  2. <a name='init'></a>初始化方法init
     _yic.push(['init', {
         el: 'kefu-btn',// 绑定按钮ID
-        token: 'RjNPWT7chxE05nGwpE4JtQQfDWAaSBCr6HO3RTb8fmU',// 加密token[该数据由系统生成]
-        src: 'https://yiconnect.wezhuiyi.com/webChat',// 聊天地址[该数据由系统生成]
+        token: 'RjNPWT7chxE05nGwpE4JtQQfDWAaSBCr6HO3RTb8fmU',   // 加密token[该数据由系统生成]
+        src: 'https://yiconnect.wezhuiyi.com/webChat',          // 聊天地址[该数据由系统生成]
         style: {
-            className: 'chat-window',// 自定义类名
-            width: '330px',// 宽度
-            height: '480px',// 高度
+            className: 'chat-window',   // 自定义类名
+            width: '330px',             // 宽度
+            height: '480px',            // 高度
+
             // 距离（也可以设置top、left）
             right: '40px',
             bottom: '0',
         },
-        themeColor:'#123456', // 默认主题色，优先级比后台设置主题色高，格式要求为 #xxxxxx 或 rgb(x,x,x)
-        noYiBot: false,// 禁止机器人会话（自动转人工，若无人工则显示留言窗口）
-        tag: '',// 优先技能（客服组）
-        ls: '',// 优先坐席
+        themeColor:'#123456',       // 默认主题色，优先级比后台设置主题色高，格式要求为 #xxxxxx 或 rgb(x,x,x)
+        noYiBot: false,             // 禁止机器人会话（自动转人工，若无人工则显示留言窗口）
+        tag: '',                    // 优先技能（客服组）
+        ls: '',                     // 优先坐席
+        showPop: true,              // 是否显示新消息气泡
+        pop: {
+            className: 'chat-pop',  // 自定义类名
+            offset: {               // 偏离位置(值为带单位的距离px,em,%)
+                top: '-87px',
+                left: '-250px',
+            }
+        },
     }]);
 
 ##  3. <a name='event'></a>事件event
@@ -56,12 +68,53 @@
     }]);
 
     data: {
-        'seq', // 消息唯一标识        
-        'word',// 消息内容
-        'timestamp',// 时间戳
-        'serviceName',// 客服名称
-        'serviceID',// 客服ID
-        'serviceAvatar',// 客服头像
-        'userID',// 接收用户ID
+        seq,              // 消息唯一标识        
+        word,             // 消息内容
+        timestamp,        // 时间戳
+        serviceName,      // 客服名称
+        serviceID,        // 客服ID
+        serviceAvatar,    // 客服头像
+        userID,           // 接收用户ID
+    }
+
+##  4. <a name='setData'></a>咨询信息接入setData【开发中】
+
+###  4.1. <a name='customer'></a>客户信息接入customer
+
+<!--| 字段名 | 类型 | 值 | 必填 | 说明 |
+|-------|------|----|------|-----|
+| cName | String | 名称 | 否 |  |
+| 字段名 | 类型 | 值 | 必填 | 说明 |
+| 字段名 | 类型 | 值 | 必填 | 说明 |-->
+
+    _yic.push(['setData', {
+        customer: {
+            cName: String,      // 名称
+            cEmail: String,     // 邮箱
+            cPhone: String,     // 手机
+            cRemark: String,    // 备注
+            extends: Object,    // 自定义字段
+        }
+    }]);
+
+    // 自定义字段示例(key,value只能是字符串类型)
+    extends: {
+        love: '鹿晗',
+        '年龄': '22',
+    }
+###  4.2. <a name='product'></a>商品信息接入product
+    _yic.push(['setData', {
+        product: {
+            title: String,      // 标题
+            desc: String,       // 描述
+            src: URL,           // 链接
+            extends: Object,    // 自定义字段            
+        }
+    }]);
+
+    // 自定义字段示例(key,value只能是字符串类型)
+    extends: {
+        '来源': '首页活动',
+        '价格': '￥19.99',
     }
 

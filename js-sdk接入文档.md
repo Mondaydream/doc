@@ -78,10 +78,12 @@
     }
 
 ##  4. <a name='setData'></a>咨询信息接入setData【开发中】
-
+说明：
+1. 所有外链资源都必须是已配置可信任的域名来源
+2. 链接引入的聊天端可在url上设置大部分字段
 ###  4.1. <a name='customer'></a>客户信息接入customer
 
-<!--| 字段名 | 类型 | 值 | 必填 | 说明 |
+<!--| 字段名 | 类型 | 值 | 必填 | 说明 | 是否允许链接
 |-------|------|----|------|-----|
 | cName | String | 名称 | 否 |  |
 | 字段名 | 类型 | 值 | 必填 | 说明 |
@@ -93,6 +95,7 @@
             cEmail: String,     // 邮箱
             cPhone: String,     // 手机
             cRemark: String,    // 备注
+            cLink: String,      // 客户详情（资源外链，来源配置）
             extends: Object,    // 自定义字段
         }
     }]);
@@ -107,7 +110,8 @@
         product: {
             title: String,      // 标题
             desc: String,       // 描述
-            src: URL,           // 链接
+            src: URL,           // 链接（来源配置）
+            image: URL,         // 图片链接（来源配置）
             extends: Object,    // 自定义字段            
         }
     }]);
@@ -118,3 +122,12 @@
         '价格': '￥19.99',
     }
 
+
+### 外围系统接入resource
+    _yic.push(['setData', {
+        resource: {
+            ...自定义参数
+        }
+    }]);
+
+    需要在后台配置资源请求url和token

@@ -95,7 +95,7 @@
             cEmail: String,     // 邮箱
             cPhone: String,     // 手机
             cRemark: String,    // 备注
-            cLink: URL,      // 客户详情（资源外链，来源配置）
+            cLink: URL,         // 客户详情（资源外链，来源配置）
             extends: Object,    // 自定义字段
         }
     }]);

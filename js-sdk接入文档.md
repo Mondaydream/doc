@@ -123,11 +123,11 @@
     }
 
 
-### 外围系统接入resource
+<!--### 外围系统接入resource
     _yic.push(['setData', {
         resource: {
             ...自定义参数
         }
     }]);
 
-    需要在后台配置资源请求url和token
+    需要在后台配置资源请求url和token-->

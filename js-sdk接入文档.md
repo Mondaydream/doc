@@ -32,7 +32,7 @@
     _yic.push(['init', {
         el: 'kefu-btn',// 绑定按钮ID
         token: 'RjNPWT7chxE05nGwpE4JtQQfDWAaSBCr6HO3RTb8fmU',   // 加密token[该数据由系统生成]
-        src: 'https://yiconnect.wezhuiyi.com/webChat',          // 聊天地址[该数据由系统生成]
+        src: 'webChat',             // 聊天地址[该数据由系统生成]
         style: {
             className: 'chat-window',   // 自定义类名
             width: '330px',             // 宽度
@@ -68,7 +68,7 @@
     }]);
 
     data: {
-        seq,              // 消息唯一标识        
+        seq,              // 消息唯一标识
         word,             // 消息内容
         timestamp,        // 时间戳
         serviceName,      // 客服名称
@@ -91,6 +91,7 @@
 
     _yic.push(['setData', {
         customer: {
+            cID: String,        // 外围系统用户ID
             cName: String,      // 名称
             cEmail: String,     // 邮箱
             cPhone: String,     // 手机
@@ -105,6 +106,10 @@
         love: '鹿晗',
         '年龄': '22',
     }
+
+    // URL引入示例(customer具体参数需要encode)
+    xxx?token=xxx&customer={"cID":"1","cName":"2"}&sign=xxx
+
 ###  4.2. <a name='product'></a>商品信息接入product
     _yic.push(['setData', {
         product: {
@@ -122,6 +127,8 @@
         '价格': '￥19.99',
     }
 
+    // URL引入示例(product具体参数需要encode)
+    xxx?token=xxx&product={"title":"1","desc":"2"}&sign=xxx
 
 <!--### 外围系统接入resource
     _yic.push(['setData', {

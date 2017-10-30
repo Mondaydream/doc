@@ -30,9 +30,9 @@
 
 ##  2. <a name='init'></a>初始化方法init
     _yic.push(['init', {
-        el: 'kefu-btn',// 绑定按钮ID
-        token: 'RjNPWT7chxE05nGwpE4JtQQfDWAaSBCr6HO3RTb8fmU',   // 加密token[该数据由系统生成]
-        src: 'webChat',             // 聊天地址[该数据由系统生成]
+        el: 'kefu-btn',                 // 绑定按钮ID
+        token: 'xxx',                   // 加密token[该数据由系统生成]
+        src: 'webChat',                 // 聊天地址[该数据由系统生成]
         style: {
             className: 'chat-window',   // 自定义类名
             width: '330px',             // 宽度
@@ -42,18 +42,25 @@
             right: '40px',
             bottom: '0',
         },
-        themeColor:'#123456',       // 默认主题色，优先级比后台设置主题色高，格式要求为 #xxxxxx 或 rgb(x,x,x)
-        noYiBot: false,             // 禁止机器人会话（自动转人工，若无人工则显示留言窗口）
-        tag: '',                    // 优先技能（客服组）
-        ls: '',                     // 优先坐席
-        showPop: true,              // 是否显示新消息气泡
+        themeColor:'#4ba0ff',           // 默认主题色，优先级比后台设置主题色高，格式要求为 #xxxxxx 或 rgb(x,x,x)
+        noYiBot: false,                 // 禁止机器人会话（自动转人工，若无人工则显示留言窗口）
+        tag: '',                        // 优先技能（客服组）
+        ls: '',                         // 优先坐席
+        showPop: true,                  // 是否显示新消息气泡
         pop: {
-            className: 'chat-pop',  // 自定义类名
-            offset: {               // 偏离位置(值为带单位的距离px,em,%)
+            className: 'chat-pop',      // 自定义类名
+            offset: {                   // 偏离位置(值为带单位的距离px,em,%)
                 top: '-87px',
                 left: '-250px',
             }
         },
+    }]);
+
+    // 调用代码示例
+    _yic.push(['init', {
+        el: 'kefu-btn',
+        token: 'RjNPWT7chxE05nGwpE4JtQQfDWAaSBCr6HO3RTb8fmU',   
+        src: 'webChat',            
     }]);
 
 ##  3. <a name='event'></a>事件event
@@ -77,7 +84,7 @@
         userID,           // 接收用户ID
     }
 
-##  4. <a name='setData'></a>咨询信息接入setData【开发中】
+##  4. <a name='setData'></a>咨询信息接入setData
 说明：
 1. 所有外链资源都必须是已配置可信任的域名来源
 2. 链接引入的聊天端可在url上设置大部分字段

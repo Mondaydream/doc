@@ -1,0 +1,159 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiMessage.h",
+      "line": 11,
+      "symbol": "YiMessageMediaTpye",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiMessage.h",
+      "line": 11,
+      "symbol": "YiMessageMediaTpye",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiMessage.h",
+      "line": 22,
+      "symbol": "YiMessageTpye",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiMessage.h",
+      "line": 22,
+      "symbol": "YiMessageTpye",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiMessage.h",
+      "line": 23,
+      "symbol": "YiMessageTpye.YiSend",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.enumcase",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiMessage.h",
+      "line": 34,
+      "symbol": "YiMessageStatus",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiMessage.h",
+      "line": 34,
+      "symbol": "YiMessageStatus",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 12,
+      "symbol": "YiClientStatus",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 12,
+      "symbol": "YiClientStatus",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 43,
+      "symbol": "YiCustomerServiceStatus",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 43,
+      "symbol": "YiCustomerServiceStatus",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 69,
+      "symbol": "YiConnectResultHandler",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 70,
+      "symbol": "YiConnectMessagesResultBlock",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 71,
+      "symbol": "YiCustomerServiceHandler",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 132,
+      "symbol": "YiCustomerServiceConfig.customer",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 134,
+      "symbol": "YiCustomerServiceConfig.product",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 271,
+      "symbol": "YiNote.email",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 273,
+      "symbol": "YiNote.phone",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 275,
+      "symbol": "YiNote.content",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 286,
+      "symbol": "YiEvaluation.evaluationLevel",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 288,
+      "symbol": "YiEvaluation.serviceID",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK/YiConnectSDK/YiService.h",
+      "line": 290,
+      "symbol": "YiEvaluation.sessionID",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/huangpengzhi/Desktop/YiConnectSDK/YiConnectSDK"
+}

@@ -1,6 +1,6 @@
 # YiConnect iOS SDK 对外集成文档
 ##使用提示
-本文是 YiConnect iOS SDK 的标准集成指南文档。 匹配的 SDK 版本为:V1.0.0及以后版本。
+本文是 YiConnect iOS SDK 的标准集成指南文档。 匹配的 SDK 版本为:V1.0.0及以后版本。此SDK支持iOS 8.0及以上版本。
 
 ##产品功能说明
 
@@ -15,6 +15,7 @@ YiConnect SDK 可以让你的应用迅速支持追一的客服机器人以及人
   * Foundation
   * Security
   * libicucore
+  * libresolv
   
 * 在 AppDelegate.m 引用头文件的位置
  
@@ -27,13 +28,27 @@ YiConnect SDK 可以让你的应用迅速支持追一的客服机器人以及人
 ## SDK 主要接口说明
 YiConnectLaunchConfig 类：启动配置模型类。
 
-YiCustomerService 类：从机器人转接人工的回调模型类。
-
 YiSetup 类：SDK 启动类，包含启动的所有接口。
 
 YiService 类：核心通信类，包含核心通信的所有接口。
 
+YiCustomerService 类：从机器人转接人工的回调模型类。
+
+YiCustomerServiceConfig 类：转人工服务配置类。
+
+YiCustomerServiceGoodInfo 类：商品信息类，用于转人工的配置的字段。
+
+YiCustomerInfo 类： 客户信息类。
+
 YiMessage 类：通信内容类，包含通信内容的所有字段。
+
+YiBotMessage 类：机器人回答类，包含机器人回复的所有字段。
+
+YiMediaImage 类：图片消息类，包含图片的信息。
+
+YiNote 类：留言类，用于留言接口。
+
+YiEvaluation 类：评价客服类，用于评价接口。
 
 
 ### method - setupWithConfig
@@ -154,6 +169,53 @@ YiMessage 类：通信内容类，包含通信内容的所有字段。
 ```
 //人工客服存在在线以及不在线的多种情况，转接人工成功的消息需要开发实现转接人工成功的回调协议函数
 [_yiService connectToCustomerService:^(YiCustomerService * _Nullable status, NSError * _Nullable error) {
+        NSLog(@"开启转人工");
+    }];
+
+```
+
+### method - connectToCustomerServiceWithConfig: handler:
+
+#### 接口定义：
+-(void)connectToCustomerServiceWithConfig:(nullable YiCustomerServiceConfig *)config handler:(nonnull YiCustomerServiceHandler)handler<br>
+
+#### 接口说明：
+
+转接到人工客服接口
+
+#### 参数说明：
+
+* config：转人工配置类。
+* handler：启动转接到回调。
+
+#### 调用示例：
+
+```
+//人工客服存在在线以及不在线的多种情况，转接人工成功的消息需要开发实现转接人工成功的回调协议函数
+  YiCustomerServiceConfig *config = [[YiCustomerServiceConfig alloc] init];
+    YiCustomerServiceGoodInfo *good = [[YiCustomerServiceGoodInfo alloc] init];
+    good.title = @"a";
+    good.desc = @"a";
+    good.src = @"a";
+    good.image = @"a";
+    good.extends = @{
+                     @"12" :@"123"
+                     };
+    YiCustomerInfo *cus = [[YiCustomerInfo alloc] init];
+    cus.cName = @"a";
+    cus.cID = @"a";
+    cus.cLink = @"a";
+    cus.cEmail = @"a";
+    cus.cRemark = @"a";
+    cus.extends = @{
+                    @"12" :@"123"
+                    };
+    
+    config.queuePriority = 1;
+    config.customer = cus;
+    config.product = good;
+    //配置类的信息，将携带进入客服的聊天界面，客服可以通过这些信息了解这个客户的相关资料，以及这次会话对应的商品信息。
+    [_yiService connectToCustomerServiceWithConfig:config handler:^(YiCustomerService * _Nullable status, NSError * _Nullable error) {
         NSLog(@"开启转人工");
     }];
 

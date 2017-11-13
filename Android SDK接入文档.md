@@ -12,8 +12,8 @@
 	|__md ---> SDK接入文档.md
 
 ##初始化
-###首先获取token和appId,然后新建一个Java Class名字叫做 MyLeanCloudApp,让它继承自 Application 类，实例代码如下:
-	public class MyLeanCloudApp extends Application {
+###首先获取token和appId,然后新建一个Java Class名字叫做 MyApplication,让它继承自 Application 类，实例代码如下:
+	public class MyApplication extends Application {
 
     		@Override
     		public void onCreate() {
@@ -21,27 +21,41 @@
 
         		// 初始化参数依次为 this, token, appId
         		YIConfig.initialize(this,"{{token}}","{{appId}}");
-				//开发调试阶段设置为true
+				//开发调试阶段设置为true 默认为false
 				YIConfig.setDebugMode(true);
-				//打开通知
+				//打开通知 默认为false
 				YIConfig.setNotificationMode(true);
 				//设置点击通知栏跳转到对应的界面
        			YIConfig.setNotification(ChatActivity.class);
+				//设置是否缓存多媒体数据 默认为false不缓存
+                YIConfig.setMediaMessageCacheEnabled(true);
+				//设置超时时长 默认是20000L
+				YIConfig.setTimeOutDuration(10000L);
     		}
 	}
 
-###初始化数据本地持久层
-	//storageId不可为空,SDK根据不同的storageId为每个用户创建唯一的本地存储
+###与服务端建立长连接
+	//serviceId不可为空,SDK根据不同的serviceId为每个用户创建唯一持久层
 	//开发者可在用户初次登录或切换用户后调用将对应的userId或其他用户的唯一标识作为storageId传入
-	YIConfig.initMessageStorage(storageId);
+	YIService.getInstance(serviceId).connectWithService(new YIServiceCallback() {
+                    @Override
+                    public void done(YIException e) {
+                        if (e == null) {
+                            //当e == null时表明已经与service成功建立连接,可与service正常进行通信
+                        } else {
+                            Log.e("YIConnect", "" + e.getMessage());
+                        }
+                    }
+                });
 
 ###然后打开 AndroidManifest.xml 文件来配置 SDK 所需要的手机的访问权限以及声明刚才我们创建的 MyLeanCloudApp 类：
 		<!--（必须加入以下声明）START -->
-		<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 		<uses-permission android:name="android.permission.INTERNET"/>
-		<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-		<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 		
 		<application
 		  ...
@@ -50,45 +64,81 @@
 		  <!-- 实时通信模块 -->
 		  <service android:name="com.wezhuiyi.yiconnect.im.manager.YIPushService"/>
 
-		  <receiver android:name="com.wezhuiyi.yiconnect.im.manager.YIBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT"/>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="YiConnect.com.PUSH_ACTION"/>
-            </intent-filter>
+          <receiver android:name="com.wezhuiyi.yiconnect.im.manager.YIBroadcastReceiver">
+              <intent-filter>
+                  <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                  <action android:name="android.intent.action.USER_PRESENT"/>
+                  <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                  <action android:name="YiConnect.com.PUSH_ACTION"/>
+              </intent-filter>
           </receiver>
-
-		  <!-- 监听网络状态的广播必须要 -->
-        <receiver android:name="com.wezhuiyi.yiconnect.im.manager.YIConnectNetWorkStatusReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-            </intent-filter>
-        </receiver>
-		</application>
+##从服务端同步聊天消息到本地消息持久层
+		YIMessage.getInstance().synchronizeMessageFromRemote(new YISyncMessageFromRemoteCallback() {
+            @Override
+            public void done(YIException e) {
+                if (e == null) {
+                    //当e == null时表明同步消息成功
+                } else {
+                    //同步消息失败
+                }
+            }
+        });
+##通过服务器查询历史消息
+		/**
+     	 * 通过服务器查询历史消息
+     	 * @param timestamp 查询时间戳以下的历史消息
+     	 * @param limmit    消息条数 最新的纪录向前查询limit条数
+     	*/
+		YIRequestion.getHistoryMessageFromServiceAfterTimestamp(final String timestamp, final int limmit, final YIGetHistoryMessageCallback callback)
+###通过服务器查询历史消息记录，从最新的纪录向前查询limit条数,最多查询15天的消息
+		/**
+     	 * 通过服务器查询历史消息记录，从最新的纪录向前查询limit条数,最多查询15天的消息
+     	 * @param limmit 条数
+     	 * @param callback 回调
+     	*/
+		YIRequestion.getHistoryMessagesFromServerWithLimmit(int limmit, YIGetHistoryMessageCallback callback)
 ##聊天发送消息
-			//发送文本消息
+			//发送文本消息 (SDK限制文本最大长度为500个字符,超过将发送失败)
 			YIImTextMessage msg = new YIImTextMessage();
             msg.setWord(message);
-            YIMessage.getInstance().createMessage(msg).send(new YIMessageStatusListener() {
-                @Override
-                public void onMessageStatusReceived(YIImMessage message, boolean isSuccess) {
-					//判断回调对应的消息实体类是文本消息还是图片或文件...
-                    if (message instanceof YIImTextMessage) {
-						//word为对应的哪一条消息体
-                        String word = ((YIImTextMessage) message).getWord();
-						//messageId消息的唯一标志
-                        String messageId = ((YIImTextMessage) message).getMessageId();
-						//isSuccess为true表示消息发送成功,false表示消息发送失败(发送超时)
+			msg.setOnMessageIdChangeListener(new YIImMessage.onMessageIdChangeListener() {
+                    @Override
+                    public void onChange(String messageId) {
+						//开发者可监听每一条消息对应的messageId
+                        Log.e("YIConnect", "===messageId===" + messageId);
                     }
-                }
-            });
+                });
+			
+			//发送图片消息
+			YIImImageMessage imageMessage = new YIImImageMessage();
+                        imageMessage.setImageType("image");
+                        imageMessage.setImageName("{{imageName}}");
+						//imageData 可以是byte[] 也可以是filePath
+                        imageMessage.setImageData("{{imageData}}");
+						//或者图片的超链接
+						imageMessage.setImageUrl("{{imageUrl}}");
+			...
 
+            YIMessage.getInstance().createMessage(msg).send(new YIMessageStatusCallback() {
+                    @Override
+                    public void done(YIImMessage imMessage, YIException e) {
+						//当e == null表示消息发送成功
+                        if (e == null) {
+                            if (imMessage instanceof YIImTextMessage) {
+                                //文本消息
+                            }
+                        } else {
+                            if (imMessage instanceof YIImTextMessage) {
+                                //文本消息
+                            }
+                        }
+                    }
+                });
+	
 ##消息重发
 	//message为消息实体
 	//文本消息对应YIImTextMessage,图片消息对应YIImImageMessage,文件消息对应YIImFileMessage
+	//message实体必须带有对应要重发的消息的messageId
 	YIMessage.getInstance().reSendTxtMessage(message);
 ##在聊天对应的Activity创建时onCreate()方法中添加接收消息监听
 	YIClient.getInstance().addMessageListener(mYIMessageListener);
@@ -97,23 +147,17 @@
 		//接收消息监听
 		YIMessageListener mYIMessageListener = new YIMessageListener() {
         @Override
-        public void onMessageTxtReceived(YINewsBean newsBean) {
-            	//private String identity; ---->service表示人工客服发来的消息,yibot表示机器人发来的消息
-    			//private String news;	   ---->news为消息内容(文本消息,图片或文件下载链接)
-    			//private String type;	   ---->word表示文本消息,iamge表示图片消息,file表示文件消息
-    			//private String reSend;
-    			//private String messageDate; ---->消息对应的时间戳(服务端生成的时间)
-    			//private String messageId;   ---->每一条消息对应的唯一标识
-        }
-
-        @Override
-        public void onMessageImageReceived(YINewsBean newsBean) {
-
-        }
-
-        @Override
-        public void onMessageFileReceived(YINewsBean newsBean) {
-
+        public void onMessageReceived(YINewsBean newsBean) {
+            //identity;消息来源的身份标识 user service
+            //messageType;
+			//sendStatus;
+			//messageDate;
+			//messageId;
+			//serviceId;
+			//sessionId;
+			//mYIImTextMessage;
+			//mYIImImageMessage;
+			//mYIImFileMessage;
         }
     };
 ##在onDestroy()方法中移除接收消息监听
@@ -121,72 +165,129 @@
 	YIClient.getInstance().removeMessageListener(mYIMessageListener);
 
 ##转人工客服
-	YIClient.getInstance().connectService();
+	YIClient.getInstance().connectToCustomerService(new YIConnectCustomerServiceCallback() {
+                        @Override
+                        public void done(final YIException e) {
+                            if (e != null) {
+								//当e != null时表示转人工超时或失败,开发者可再次发起转人工
+                                Log.e("YIConnect", "==connectToCustomerService==" + e.getMessage());
+                            } else {
+								//当e == null时表示转人工成功
+                            }
+                        }
+                    });
+###转人工客服(携带开发者定义的自定义参数)
+	YIClient.getInstance().connectToCustomerServiceWithConfig(config, new YIConnectCustomerServiceCallback() {
+                    @Override
+                    public void done(YIException e) {
+						if (e != null) {
+								//当e != null时表示转人工超时或失败,开发者可再次发起转人工
+                                Log.e("YIConnect", "==connectToCustomerService==" + e.getMessage());
+                            } else {
+								//当e == null时表示转人工成功
+                            }
+                    }
+                });
 ##添加转人工状态监听
-	YIClient.getInstance().addConnectSerivceStatusLinsener(YIConnectServiceStatusListener listener);
-	
-	/**
-     * 转人工成功回调接口
-     */
-    void onConnectSuccessReceived();
+	YIClient.getInstance().addConnectToCustomerServiceStatusLinsener(new YIConnectCustomerServiceStatusListener() {
+            @Override
+            public void onConnectSuccessReceived(YIServiceInfoBean infoBean) {
+               	//转人工成功回调
+			   	//YIServiceInfoBean封装了人工客服的相关信息
+            }
 
-    /**
-     * 与人工客服会话结束
-     */
-    void onConnectClosed();
-		//可调用requestGetForEvaluationSize()接口同步可提交评价项来展示对应的UI布局
-		YIRequestion.requestGetForEvaluationSize();
-		//提交对客服人员的服务评价
-		//valuation 评价的满意值 3项 31(不满意) 32(一般) 33(满意) 5项 51(非常不满意) 52(不满意) 53(一般) 54(满意) 55(非常满意)
-		YIRequestion.requestPostForEvaluations(valuation);
+            @Override
+            public void onConnectClosed(YIServiceInfoBean infoBean) {
+                //在人工客服状态时断开人工客服连接回调
+            }
 
-    /**
-     * 转人工排队中接口
-     *
-     * @param queueNumber
-     */
-    void onQueueNumberReceived(String queueNumber);//排队人数---0表示只有你一个人在排队
+            @Override
+            public void onCancelQueueReceived() {
+                //取消排队回调
+            }
 
-    /**
-     * 取消排队
-     */
-    void onCancelQueueReceived();
-		//当调用了取消排队时回调
-
-    /**
-     * 转人工异常--->排队上限/已在排队....
-     *
-     * @param code 错误码
-     * @param des  错误描述
-     */
-    void onConnectServiceError(String code, String des);
-		//code 为 "-61008"表示当前无人工客服在线
-			当无人工客服在线时可调用
-			YIRequestion.requestPostForLeaveMessage(email, phone, content);
-			提交留言给客服人员
-		//当code 为 "-61007"表示排队人数达到上限 可通过Toast显示对应的des错误描述
-		//当code 为 "-61008" 可通过Toast显示对应的des错误描述
-		//当code 为 "61001"表示正在排队中... 可通过Toast显示对应的des错误描述
-		//当code 为 "2"表示当前已是人工客服 可通过Toast显示对应的des错误描述y
+            @Override
+            public void onConnectServiceStatus(YIServiceInfoBean infoBean) {
+                //转人工客服时的状态
+				//int status = infoBean.getStatus()
+				//ERROR_MSG_RETRANSMIT = -61009,消息重传
+				//ERROR_NO_SERVICE = -61008,没有客服在线 
+  				//ERROR_REJECT_ENQUEUE = -61007,拒绝排队 
+				  ERROR_SERVICE_BUSY = -61006,坐席服务人数达到最大值 
+  				  ERROR_SERVICE_OFFLINE = -61005,坐席处于下线状态 
+				  ERROR_SESSION_WRONG = -61004,会话错误，不存在该会话  
+				  ERROR_UNKNOWN_PACKET = -61003,无法解析的Json通信数据包  
+				  ERROR_SYSTEM_WRONG = -61002,系统异常，主要指的是yiserver和kv,chatProxy之间通信异常     
+				  ERROR_NOT_READY = -61001,没有收到配置，系统处于非工作状态    
+				  ERROR_NO_ERROR = 0,正确操作  
+				  WARN_ALREADY_ONQUEUE = 61001,用户已经在排队
+				  WARN_ALREADY_INSERVICE = 61002,用户已经在和坐席沟通服务
+				  WARN_NOT_ONDUEUE = 61003,用户不在排队队列
+				  WARN_NOT_INSERVICE = 61004,关闭会话时，提醒用户已经不在和坐席沟通服务
+				  WARN_ALREADY_ONLINE = 61005,坐席上线时，提醒坐席已经处于上线状态
+				  WARN_ALREADY_OFFLINE = 61006,坐席下线时，提醒坐席已经下线
+				  SERVICE_WITH_NO_QUEUE = 71001,坐席对队列为空（不需要排队）
+            }
+        });
+##检测转人工客服排队状态
+		YIClient.getInstance().checkConnectToCustomerServiceQueueStatus(new YIConnectCustomerServiceQueueStatusListener() {
+                    @Override
+                    public void onQueueStatus(String queueNumber, YIException e) {
+					   //当e != null时表示检测转人工客服排队状态超时或失败,开发者可再次发起检测转人工客服排队状态
+                       //当"0".equals(queueNumber)为true时,表示正在排队中且在你之前有一位正在与客服交流中
+					   //当"1".equals(queueNumber)为true时,表示正在排队中且前面有一人正在排队
+					   //以此类推....
+                    }
+                });
 ##当转人工在排队状态时发起取消排队
-	YIClient.getInstance().cancelQueueConnectService();
-
+	YIClient.getInstance().cancelQueueConnectToCustomerService(new YICancelQueueConnectCustomerServiceCallback() {
+                    @Override
+                    public void done(YIException e) {
+                        //当e != null时表示取消排队超时或失败,开发者可再次发起转人工
+                    }
+                });
+##结束与人工客服聊天
+	YIClient.getInstance().closeSessionToCustomerService(new YICloseSessionToCustomerServiceCallback() {
+                    @Override
+                    public void done(YIException e) {
+                        //当e != null时表示结束与人工客服聊天超时或失败,开发者可再次发起转人工
+                    }
+                });
+##客服会话结束提交评价
+		/**
+     	 * 客服会话结束提交评价
+     	 *
+     	 * @param yiServiceInfoBean
+     	*/
+	YIRequestion.requestPostForEvaluations(YIServiceInfoBean yiServiceInfoBean, YISubmitForEvaluationsCallback callback)
+##客服不在线提交留言
+		/**
+     	 * 客服不在线,提交留言
+     	 *
+     	 * @return 是否提交成功的状态
+     	*/
+		YIRequestion.requestPostForLeaveMessage(YILeaveMessageBean yiLeaveMessageBean, YISubmitForLeaveMessageCallback callback)
+##添加server端发来请求监听 
+	YIClient.getInstance().addServiceRequestConnectCallback(new YIServiceRequestCallback() {
+            @Override
+            public void done(YIServiceInfoBean infoBean) {
+				
+   			}
+        });
 ##添加网络状态监听
 	YIClient.getInstance().addNetWorkStatusListener(mYINetWorkStatusListener);
 
 	YINetWorkStatusListener mYINetWorkStatusListener = new YINetWorkStatusListener() {
         @Override
-        public void onNetWorkConnected() {
-            
+        public void onNetWorkConnected(int code) {
+            //code = 10001 network connecting
+			//code != 10001 network connected
         }
 
         @Override
         public void onNetWorkDisConnected(int code) {
             //code错误码对应的状态
 				code = 24 network disconnect
-				code = -1 connection refused
-				code = 3000 connection unhealthy
-				code = 1006 remote NotAvailable
         }
     };
 
@@ -199,7 +300,10 @@
 ##本地消息操作
 ###查询所有消息
 	YIMessage.getInstance().getAllMessage();
-	返回值为 ArrayList<YINewsBean>
+		return ArrayList<YINewsBean>
+###查询未读消息
+	YIMessage.getInstance().getUnreadMessage();
+		return ArrayList<YINewsBean>
 ###分页查询消息
 	/**
 	 *pageCount表示查询一页查询到的消息条数(ps: 当pageCount为10 一页查询10条消息)
@@ -212,11 +316,6 @@
 ###查询最近一条消息
 	YIMessage.getInstance().getMessageForLast();
 	返回值为 ArrayList<YINewsBean>
-###从服务端同步消息并查询出最近一条消息
-	YIMessage.getInstance().synchronizeMessageFromRemote(YIMessage.onGetMessageForLastListener listener);
-	//方法回调
-	onSuccess(ArrayList<YINewsBean> newsBeen);//表现同步成功
-	onFailure();//表示同步失败
 ###查询未读消息条数
 	YIMessage.getInstance().getUnreadMessageCount()
 	返回值为 int count
